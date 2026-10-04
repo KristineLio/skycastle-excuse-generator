@@ -23,24 +23,24 @@
         linear-gradient(180deg,#090710,#0d0915);
       overflow-x:hidden
     }
-    .wrap{width:min(940px,calc(100% - 24px));margin:0 auto;padding:24px 0 64px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+    .wrap{width:min(1180px,calc(100% - 24px));margin:0 auto;padding:14px 0 28px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
     .brand{font-weight:950;letter-spacing:-.03em}
     .badge{font-size:.75rem;font-weight:900;padding:8px 11px;border-radius:999px;color:var(--gold);border:1px solid rgba(255,207,92,.28);background:rgba(255,207,92,.08)}
-    .hero{text-align:center;padding:12px 0 24px}
-    .eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-weight:950;margin-bottom:16px}
-    h1{font-size:clamp(3rem,9vw,6rem);line-height:.92;letter-spacing:-.07em;margin:0 auto 18px;max-width:900px}
+    .hero{text-align:center;padding:2px 0 12px}
+    .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-weight:950;margin-bottom:8px}
+    h1{font-size:clamp(2.7rem,6.2vw,5rem);line-height:.9;letter-spacing:-.07em;margin:0 auto 10px;max-width:980px}
     .grad{background:linear-gradient(100deg,var(--gold),#fff1a8 38%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
-    .sub{color:var(--muted);max-width:680px;margin:0 auto;font-size:clamp(1rem,2.4vw,1.18rem);line-height:1.5}
-    .card{background:linear-gradient(180deg,rgba(29,22,48,.97),rgba(17,13,29,.98));border:1px solid var(--line);border-radius:26px;padding:clamp(16px,4vw,30px);box-shadow:0 28px 80px rgba(0,0,0,.4)}
-    .q{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);margin-bottom:12px}
-    .q h3{margin:0 0 12px;font-size:1rem}
-    .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .opt{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:13px 14px;border-radius:14px;cursor:pointer;font-weight:800;text-align:left;transition:.16s}
+    .sub{color:var(--muted);max-width:760px;margin:0 auto;font-size:clamp(.92rem,1.6vw,1.05rem);line-height:1.35}
+    .card{background:linear-gradient(180deg,rgba(29,22,48,.97),rgba(17,13,29,.98));border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 24px 70px rgba(0,0,0,.38)}
+    .q{padding:11px 12px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.03);margin-bottom:8px}
+    .q h3{margin:0 0 8px;font-size:.9rem}
+    .opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    .opt{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:10px 11px;border-radius:12px;cursor:pointer;font-weight:800;text-align:left;transition:.16s;font-size:.86rem;line-height:1.2}
     .opt:hover{border-color:rgba(255,207,92,.4);transform:translateY(-1px)}
     .opt.active{background:rgba(255,207,92,.12);border-color:rgba(255,207,92,.55);color:#fff5c8}
-    .actions{display:grid;grid-template-columns:1.3fr 1fr;gap:10px;margin-top:14px}
-    button{border:0;border-radius:16px;padding:16px;cursor:pointer;font:900 1rem/1 ui-sans-serif,system-ui}
+    .actions{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:8px}
+    button{border:0;border-radius:14px;padding:13px 14px;cursor:pointer;font:900 .92rem/1 ui-sans-serif,system-ui}
     .primary{background:linear-gradient(135deg,var(--gold),#ff9f43 60%,var(--pink));color:#1a1000}
     .secondary{background:rgba(255,255,255,.055);border:1px solid var(--line);color:var(--text)}
     .result{display:none;margin-top:22px}
@@ -82,9 +82,17 @@
     @keyframes rise{to{transform:translateY(-105vh) rotate(220deg);opacity:0}}
     .shake{animation:shake .42s ease}
     @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+    @media(max-width:900px){
+      .opts{grid-template-columns:repeat(2,1fr)}
+    }
     @media(max-width:680px){
+      .wrap{padding-top:14px}
+      .top{margin-bottom:14px}
+      .hero{padding:4px 0 16px}
       .opts,.actions,.shareRow,.meta{grid-template-columns:1fr}
-      h1{font-size:clamp(3.2rem,16vw,4.8rem)}
+      h1{font-size:clamp(3rem,15vw,4.5rem)}
+      .q{padding:14px}
+      .opt{padding:12px 13px}
     }
   </style>
 </head>
