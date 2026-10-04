@@ -1,154 +1,390 @@
-<!-- aha-build-id: bmuu4077qyzuf0xx2 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Excuse Generator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0a0712" />
+  <meta name="description" content="A tiny chaotic excuse generator for hackathon builders who are definitely almost done." />
+  <title>Skycastle Excuse Generator 🏰😭</title>
   <style>
-    :root {
-      --ink: #1c1914;
-      --paper: #f6f0e6;
-      --card: #fffdf8;
-      --accent: #c45c26;
-      --muted: #6b645a;
+    :root{
+      --bg:#090710;
+      --panel:#120e1d;
+      --panel2:#1a1429;
+      --text:#fffaf7;
+      --muted:#b8acc8;
+      --gold:#ffcf5c;
+      --pink:#ff65c3;
+      --violet:#8b5cf6;
+      --green:#6ee7b7;
+      --red:#ff6b6b;
+      --line:rgba(255,255,255,.11);
+      --shadow:0 28px 80px rgba(0,0,0,.42);
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Source Sans 3", system-ui, sans-serif;
-      color: var(--ink);
-      background: var(--paper);
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(139,92,246,.26), transparent 34%),
+        radial-gradient(circle at 90% 12%, rgba(255,101,195,.18), transparent 28%),
+        linear-gradient(180deg,#0a0712 0%,#0d0915 100%);
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      overflow-x:hidden;
     }
-    .wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
+    .noise{
+      position:fixed; inset:0; pointer-events:none; opacity:.12;
+      background-image:radial-gradient(rgba(255,255,255,.35) .6px, transparent .6px);
+      background-size:7px 7px;
+      mask-image:linear-gradient(to bottom,black,transparent 80%);
     }
-    h1 {
-      font-family: Fraunces, Georgia, serif;
-      font-size: clamp(2.2rem, 5vw, 3.4rem);
-      margin: 0 0 8px;
-      letter-spacing: -0.03em;
+    .wrap{width:min(920px,calc(100% - 28px));margin:0 auto;padding:30px 0 64px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px}
+    .brand{font-weight:900;letter-spacing:-.03em;font-size:1rem}
+    .badge{
+      border:1px solid rgba(255,207,92,.3);
+      color:var(--gold);
+      background:rgba(255,207,92,.08);
+      padding:8px 12px;border-radius:999px;font-size:.78rem;font-weight:800;
     }
-    .lede {
-      color: var(--muted);
-      font-size: 1.1rem;
-      margin: 0 0 32px;
-      max-width: 38ch;
+    .hero{text-align:center;padding:6px 0 22px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--pink);font-size:.78rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;
+      margin-bottom:16px
     }
-    .stage {
-      background: var(--card);
-      border: 1px solid #e4d9c8;
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 18px 40px rgba(28, 25, 20, 0.08);
+    h1{
+      font-size:clamp(2.9rem,9vw,6.4rem);
+      line-height:.91;letter-spacing:-.075em;margin:0 auto 18px;
+      max-width:900px;font-weight:1000;
     }
-    label {
-      display: block;
-      font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+    .gradient{
+      background:linear-gradient(100deg,var(--gold),#fff2b2 38%,var(--pink) 76%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
     }
-    select {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #d8ccba;
-      background: #fff;
-      font: inherit;
-      margin-bottom: 20px;
+    .sub{
+      max-width:650px;margin:0 auto;color:var(--muted);
+      font-size:clamp(1rem,2.5vw,1.18rem);line-height:1.5;
     }
-    button {
-      appearance: none;
-      border: 0;
-      background: var(--accent);
-      color: #fff;
-      font: 600 1rem/1 "Source Sans 3", sans-serif;
-      padding: 14px 22px;
-      border-radius: 999px;
-      cursor: pointer;
+    .card{
+      margin-top:26px;background:linear-gradient(180deg,rgba(27,20,42,.96),rgba(16,12,27,.98));
+      border:1px solid var(--line);border-radius:28px;padding:clamp(18px,4vw,34px);
+      box-shadow:var(--shadow);position:relative;overflow:hidden;
     }
-    button:hover { filter: brightness(1.05); }
-    .excuse {
-      margin-top: 28px;
-      font-family: Fraunces, Georgia, serif;
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
-      line-height: 1.35;
-      min-height: 4.2em;
+    .card:before{
+      content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:28px;
+      background:linear-gradient(135deg,rgba(255,207,92,.16),transparent 28%,rgba(255,101,195,.13));
+      mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;padding:1px;
     }
-    .meta {
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 0.92rem;
+    .meterRow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+    .meterLabel{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:900}
+    .severity{
+      font-size:.76rem;font-weight:900;border-radius:999px;padding:7px 10px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05)
+    }
+    .sev-believable{color:var(--green)}
+    .sev-questionable{color:var(--gold)}
+    .sev-cooked{color:var(--red)}
+    .excuseBox{
+      min-height:210px;display:grid;place-items:center;text-align:center;
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;
+      padding:28px;background:rgba(255,255,255,.025);position:relative;
+    }
+    .excuse{
+      font-size:clamp(1.55rem,4.4vw,2.45rem);
+      line-height:1.2;letter-spacing:-.035em;font-weight:900;margin:0;
+      max-width:760px;
+    }
+    .tiny{margin-top:14px;color:#8f839f;font-size:.83rem}
+    .actions{
+      display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin-top:14px
+    }
+    button{
+      border:0;border-radius:16px;padding:16px 18px;cursor:pointer;
+      font:900 1rem/1 ui-sans-serif,system-ui;transition:.18s transform,.18s filter,.18s border-color;
+    }
+    button:active{transform:scale(.985)}
+    .primary{
+      color:#180f00;background:linear-gradient(135deg,var(--gold),#ff9d5c 58%,var(--pink));
+      box-shadow:0 12px 35px rgba(255,160,80,.18)
+    }
+    .secondary{
+      color:var(--text);background:rgba(255,255,255,.055);
+      border:1px solid var(--line)
+    }
+    .shareRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .shareRow button{padding:13px 14px;font-size:.9rem}
+    .loading{
+      display:none;position:absolute;inset:0;background:rgba(18,14,29,.96);
+      place-items:center;text-align:center;padding:24px;z-index:5;
+    }
+    .loading.show{display:grid}
+    .orb{
+      width:52px;height:52px;border-radius:50%;margin:0 auto 14px;
+      border:3px solid rgba(255,255,255,.12);border-top-color:var(--gold);
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loadingText{font-weight:900;font-size:1.08rem}
+    .loadingSub{color:var(--muted);font-size:.84rem;margin-top:6px}
+    .stats{
+      margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px
+    }
+    .stat{
+      border:1px solid var(--line);border-radius:17px;padding:16px 12px;
+      background:rgba(255,255,255,.03);text-align:center
+    }
+    .stat strong{display:block;font-size:1.38rem;letter-spacing:-.04em;margin-bottom:4px}
+    .stat span{font-size:.75rem;color:var(--muted)}
+    .cta{
+      margin-top:18px;text-align:center;padding:17px;border-radius:18px;
+      border:1px dashed rgba(255,207,92,.35);color:#f8e9b5;background:rgba(255,207,92,.055);
+      font-weight:900
+    }
+    .footer{text-align:center;margin-top:20px;color:#746982;font-size:.78rem}
+    .pulse{animation:pulse .34s ease}
+    @keyframes pulse{0%{transform:scale(.985);opacity:.75}100%{transform:scale(1);opacity:1}}
+    .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+    .confetti i{
+      position:absolute;width:9px;height:16px;top:-20px;border-radius:3px;
+      animation:fall 1.2s ease-in forwards
+    }
+    @keyframes fall{to{transform:translateY(110vh) rotate(660deg);opacity:.7}}
+    .toast{
+      position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
+      background:#fff;color:#140f1d;padding:12px 16px;border-radius:999px;font-weight:900;font-size:.87rem;
+      opacity:0;pointer-events:none;transition:.22s;z-index:30;box-shadow:0 14px 40px rgba(0,0,0,.28)
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:650px){
+      .wrap{width:min(100% - 18px,920px);padding-top:18px}
+      .topbar{margin-bottom:24px}
+      .badge{font-size:.68rem;padding:7px 9px}
+      h1{font-size:clamp(3rem,16vw,4.5rem)}
+      .card{border-radius:22px;padding:14px}
+      .excuseBox{min-height:235px;padding:22px 16px}
+      .actions,.shareRow{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
 <body>
+  <div class="noise"></div>
+  <div class="confetti" id="confetti"></div>
+  <div class="toast" id="toast">Copied. Your reputation is now your problem.</div>
+
   <main class="wrap">
-    <h1>Excuse Generator</h1>
-    <p class="lede">Need a moment? Pick a situation and we’ll craft a politely outrageous alibi.</p>
-    <section class="stage">
-      <label for="scene">Situation</label>
-      <select id="scene">
-        <option value="late">Running late</option>
-        <option value="meeting">Missed a meeting</option>
-        <option value="homework">Homework not done</option>
-        <option value="party">Skipping a party</option>
-        <option value="work">Can’t finish work today</option>
-      </select>
-      <button type="button" id="go">Give me an excuse</button>
-      <p class="excuse" id="excuse">Your perfectly reasonable excuse will land here.</p>
-      <p class="meta" id="meta"></p>
+    <div class="topbar">
+      <div class="brand">🏰 SKYCASTLE LABS</div>
+      <div class="badge">MOST REACTIONS MODE</div>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">⚠️ emergency hackathon infrastructure</div>
+      <h1>I'M <span class="gradient">ALMOST DONE.</span></h1>
+      <p class="sub">
+        Need a believable reason why your build is still not finished?
+        We consulted the hackathon gods so you don't have to.
+      </p>
     </section>
+
+    <section class="card">
+      <div class="meterRow">
+        <div class="meterLabel">Excuse credibility</div>
+        <div class="severity sev-believable" id="severity">🟢 BELIEVABLE</div>
+      </div>
+
+      <div class="excuseBox" id="excuseBox">
+        <div>
+          <p class="excuse" id="excuse">“It worked locally.”</p>
+          <div class="tiny" id="tiny">The oldest spell in the castle.</div>
+        </div>
+
+        <div class="loading" id="loading">
+          <div>
+            <div class="orb"></div>
+            <div class="loadingText" id="loadingText">Consulting the hackathon gods…</div>
+            <div class="loadingSub">This is somehow still faster than debugging.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="generate">🎲 GENERATE EXCUSE</button>
+        <button class="secondary" id="worse">🔥 MAKE IT WORSE</button>
+      </div>
+
+      <div class="shareRow">
+        <button class="secondary" id="copy">📋 Copy excuse</button>
+        <button class="secondary" id="share">📤 Share the chaos</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><strong>3%</strong><span>coding</span></div>
+        <div class="stat"><strong>17%</strong><span>debugging</span></div>
+        <div class="stat"><strong>30%</strong><span>refreshing</span></div>
+        <div class="stat"><strong>50%</strong><span>telling Slack “almost done”</span></div>
+      </div>
+
+      <div class="cta">👇 Share your excuse in the thread. The worst one wins spiritually.</div>
+    </section>
+
+    <div class="footer">Built instead of finishing the actual hackathon project.</div>
   </main>
+
   <script>
-    const bank = {
-      late: [
-        "A flock of geese claimed the crosswalk and I am not arguing with waterfowl.",
-        "My coffee machine started a firmware update at the worst possible second.",
-        "The elevator stopped on every floor to admire itself."
+    const banks = {
+      0: [
+        ["It worked locally.", "The oldest spell in the castle."],
+        ["GitHub Pages is still thinking about it.", "Please respect its process."],
+        ["The deploy button looked disabled, so I only clicked it 47 times.", "Patience is a technical skill."],
+        ["My agent said ‘done’ with the confidence of a man who had changed nothing.", "We love ownership."],
+        ["I fixed the bug. The bug had a backup.", "Enterprise resilience."],
+        ["The build passed. Reality did not.", "Different environments."],
+        ["I was waiting for the cache to clear. Emotionally.", "Hard refresh pending."],
+        ["One tiny CSS change became a constitutional crisis.", "Frontend engineering."],
+        ["The demo worked perfectly until another human looked at it.", "Observer effect."],
+        ["I added one feature and discovered seven side quests.", "Scope is a social construct."]
       ],
-      meeting: [
-        "My calendar invited a second me, and the other me took the slot.",
-        "I was trapped in a hallway conversation that had no legal exit.",
-        "The video link asked for a password I definitely never set."
+      1: [
+        ["Gemini rewrote my entire app because I asked it to change the border radius.", "Technically, the border radius is fixed."],
+        ["The AI said ‘I’ve implemented that for you’ and then deleted the button.", "Autonomy achieved."],
+        ["I spent three hours polishing the landing page and eleven minutes building the product.", "Brand first."],
+        ["I added an agent. Nobody knows why. Not even the agent.", "Agentic."],
+        ["The app only works when I’m not screen recording.", "Quantum demo state."],
+        ["I refreshed until the bug became a feature.", "Iteration."],
+        ["The API key was correct. The universe was misconfigured.", "Please file an issue with physics."],
+        ["I fixed mobile by deciding desktop is the target audience.", "Strategic narrowing."],
+        ["My last-minute improvement improved the amount of last minute.", "Compounding returns."],
+        ["I was debugging the thing I built to avoid debugging the other thing.", "Abstraction."]
       ],
-      homework: [
-        "My notes joined a union and refused unpaid overtime.",
-        "The printer ate page three and demanded snacks.",
-        "I had to explain gravity to a very confident cat."
-      ],
-      party: [
-        "My plants scheduled an emergency watering summit.",
-        "I promised the sofa I would stay in tonight.",
-        "A documentary about bread started and leaving felt rude."
-      ],
-      work: [
-        "The spreadsheet developed feelings and needed space.",
-        "My keyboard is practicing a slow movement in B-flat.",
-        "I found a plot hole in the task list and had to rewrite act two."
+      2: [
+        ["The castle rejected my deploy because it sensed fear.", "Infrastructure has become sentient."],
+        ["I accidentally vibe-coded a second startup while trying to fix one button.", "Please respect the pivot."],
+        ["My agent opened a PR against me personally.", "Changes requested."],
+        ["I asked AI for a quick fix and now the repo has lore.", "There are factions."],
+        ["The bug is no longer reproducible because it has achieved consciousness.", "Do not provoke it."],
+        ["I didn't miss the deadline. The deadline failed to align with my roadmap.", "Executive thinking."],
+        ["The app is finished. I am currently implementing evidence.", "Post-production engineering."],
+        ["I deleted production to reduce technical debt to zero.", "Clean architecture."],
+        ["I renamed ‘broken’ to ‘experimental’ and shipped it.", "Product strategy."],
+        ["There is no bug. There is only an undocumented alternate user journey.", "Please clap."]
       ]
     };
-    const go = document.getElementById("go");
-    const scene = document.getElementById("scene");
+
+    const labels = [
+      ["🟢 BELIEVABLE","sev-believable"],
+      ["🟡 QUESTIONABLE","sev-questionable"],
+      ["🔴 ABSOLUTELY COOKED","sev-cooked"]
+    ];
+
+    let level = 0;
+    let last = "";
     const excuse = document.getElementById("excuse");
-    const meta = document.getElementById("meta");
-    go.addEventListener("click", () => {
-      const list = bank[scene.value];
-      const pick = list[Math.floor(Math.random() * list.length)];
-      excuse.textContent = pick;
-      meta.textContent = "Freshly minted. Use responsibly.";
+    const tiny = document.getElementById("tiny");
+    const severity = document.getElementById("severity");
+    const loading = document.getElementById("loading");
+    const loadingText = document.getElementById("loadingText");
+    const box = document.getElementById("excuseBox");
+    const toast = document.getElementById("toast");
+
+    function rand(list){
+      let item = list[Math.floor(Math.random()*list.length)];
+      if(item[0]===last && list.length>1) return rand(list);
+      return item;
+    }
+
+    function updateSeverity(){
+      severity.textContent = labels[level][0];
+      severity.className = "severity " + labels[level][1];
+    }
+
+    function showExcuse(targetLevel = level){
+      level = Math.max(0,Math.min(2,targetLevel));
+      updateSeverity();
+      const item = rand(banks[level]);
+      last = item[0];
+
+      const loadingLines = [
+        "Consulting the hackathon gods…",
+        "Blaming the cache…",
+        "Asking an agent to take responsibility…",
+        "Generating plausible deniability…",
+        "Reclassifying bugs as features…"
+      ];
+      loadingText.textContent = loadingLines[Math.floor(Math.random()*loadingLines.length)];
+      loading.classList.add("show");
+
+      setTimeout(()=>{
+        excuse.textContent = "“" + item[0] + "”";
+        tiny.textContent = item[1];
+        loading.classList.remove("show");
+        box.classList.remove("pulse");
+        void box.offsetWidth;
+        box.classList.add("pulse");
+        if(level===2) burst();
+      }, 520);
+    }
+
+    function burst(){
+      const host = document.getElementById("confetti");
+      const colors = ["#ffcf5c","#ff65c3","#8b5cf6","#6ee7b7","#ffffff"];
+      for(let i=0;i<30;i++){
+        const p=document.createElement("i");
+        p.style.left=(Math.random()*100)+"vw";
+        p.style.background=colors[Math.floor(Math.random()*colors.length)];
+        p.style.animationDelay=(Math.random()*.18)+"s";
+        p.style.transform="rotate("+(Math.random()*180)+"deg)";
+        host.appendChild(p);
+        setTimeout(()=>p.remove(),1500);
+      }
+    }
+
+    function currentText(){
+      return excuse.textContent.replace(/[“”]/g,"") + " — Skycastle Excuse Generator";
+    }
+
+    function showToast(msg){
+      toast.textContent=msg;
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"),1700);
+    }
+
+    document.getElementById("generate").addEventListener("click",()=>showExcuse(level));
+    document.getElementById("worse").addEventListener("click",()=>{
+      if(level<2) showExcuse(level+1);
+      else showExcuse(2);
+    });
+
+    document.getElementById("copy").addEventListener("click", async ()=>{
+      try{
+        await navigator.clipboard.writeText(currentText());
+        showToast("Copied. Your reputation is now your problem.");
+      }catch{
+        showToast("Copy failed. Blame the browser.");
+      }
+    });
+
+    document.getElementById("share").addEventListener("click", async ()=>{
+      const shareData={
+        title:"Skycastle Excuse Generator",
+        text:currentText(),
+        url:location.href
+      };
+      if(navigator.share){
+        try{await navigator.share(shareData);}catch{}
+      }else{
+        try{
+          await navigator.clipboard.writeText(currentText()+" "+location.href);
+          showToast("Share text copied. Cause chaos responsibly.");
+        }catch{
+          showToast("Share failed. Excellent excuse material.");
+        }
+      }
     });
   </script>
 </body>
 </html>
-
-<script>/*aha-img-guard v2.1:user-relative-no-stock*/(function(){var API="https://skycastle.ai/api/img-search?q=";var bad=/images\.unsplash\.com|source\.unsplash\.com|picsum\.photos|loremflickr\.com|placekitten/;function tile(i){try{var d=document.createElement("div");d.style.cssText="width:100%;height:100%;min-height:120px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e9dfd2,#cdb89a);color:#6b5d49;font:600 14px system-ui;text-align:center;padding:10px;box-sizing:border-box";d.textContent=i.getAttribute("alt")||"";if(i.parentNode)i.parentNode.replaceChild(d,i);}catch(e){}}function real(i){var q=(i.getAttribute("alt")||"").trim();if(!q){tile(i);return;}fetch(API+encodeURIComponent(q)).then(function(r){return r.json();}).then(function(d){if(d&&d.url){i.onerror=function(){tile(i);};i.src=d.url;}else tile(i);}).catch(function(){tile(i);});}function userRel(sa){return!!sa&&!/^https?:\/\//i.test(sa)&&!/^\/\//.test(sa)&&!/^data:/i.test(sa)&&!/^blob:/i.test(sa);}function chk(i){if(i.__ag)return;try{if(i.closest&&i.closest("nav,footer"))return;if(i.closest&&i.closest("header")&&/\b(logo|brand|icon|wordmark)\b/i.test(i.getAttribute("alt")||""))return;}catch(e){}var s=(i.currentSrc||i.src||i.getAttribute("src")||"").trim();var sa=(i.getAttribute("src")||"").trim();var alt=(i.getAttribute("alt")||"").trim();if(bad.test(s)){i.__ag=1;real(i);return;}if(/^https?:\/\//.test(s)){i.__ag=1;i.addEventListener("error",function(){real(i);});return;}if(!sa){if(alt){i.__ag=1;real(i);}return;}i.__ag=1;var fail=function(){if(userRel(sa))tile(i);else real(i);};if(i.complete&&i.naturalWidth===0){fail();return;}i.addEventListener("error",fail);}function scan(){document.querySelectorAll("img").forEach(chk);}try{new MutationObserver(scan).observe(document.documentElement,{childList:true,subtree:true,attributes:true,attributeFilter:["src"]});}catch(e){}document.addEventListener("DOMContentLoaded",scan);window.addEventListener("load",function(){scan();setTimeout(scan,800);setTimeout(scan,2000);});})();</script>
