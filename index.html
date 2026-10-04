@@ -3,34 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0a0712" />
+  <meta name="theme-color" content="#090710" />
   <meta name="description" content="Find out how cooked your hackathon build is." />
   <title>How Cooked Is Your Hackathon Build? 🔥🏰</title>
   <style>
     :root{
-      --bg:#090710;
-      --panel:#140f20;
-      --panel2:#1d1630;
-      --text:#fffaf7;
-      --muted:#b8acc8;
-      --gold:#ffcf5c;
-      --pink:#ff65c3;
-      --violet:#8b5cf6;
-      --green:#6ee7b7;
-      --orange:#ff9f43;
-      --red:#ff5d73;
-      --line:rgba(255,255,255,.11);
+      --bg:#090710;--panel:#140f20;--panel2:#1d1630;--text:#fffaf7;--muted:#b8acc8;
+      --gold:#ffcf5c;--pink:#ff65c3;--violet:#8b5cf6;--green:#6ee7b7;--orange:#ff9f43;
+      --red:#ff5d73;--line:rgba(255,255,255,.11)
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      margin:0;
-      min-height:100vh;
-      color:var(--text);
+      margin:0;min-height:100vh;color:var(--text);
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:
         radial-gradient(circle at 12% 0%,rgba(139,92,246,.28),transparent 34%),
         radial-gradient(circle at 88% 8%,rgba(255,101,195,.18),transparent 28%),
         linear-gradient(180deg,#090710,#0d0915);
+      overflow-x:hidden
     }
     .wrap{width:min(940px,calc(100% - 24px));margin:0 auto;padding:24px 0 64px}
     .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
@@ -45,27 +36,52 @@
     .q{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.03);margin-bottom:12px}
     .q h3{margin:0 0 12px;font-size:1rem}
     .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .opt{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:13px 14px;border-radius:14px;cursor:pointer;font-weight:800;text-align:left}
-    .opt:hover{border-color:rgba(255,207,92,.4)}
+    .opt{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);padding:13px 14px;border-radius:14px;cursor:pointer;font-weight:800;text-align:left;transition:.16s}
+    .opt:hover{border-color:rgba(255,207,92,.4);transform:translateY(-1px)}
     .opt.active{background:rgba(255,207,92,.12);border-color:rgba(255,207,92,.55);color:#fff5c8}
     .actions{display:grid;grid-template-columns:1.3fr 1fr;gap:10px;margin-top:14px}
     button{border:0;border-radius:16px;padding:16px;cursor:pointer;font:900 1rem/1 ui-sans-serif,system-ui}
     .primary{background:linear-gradient(135deg,var(--gold),#ff9f43 60%,var(--pink));color:#1a1000}
     .secondary{background:rgba(255,255,255,.055);border:1px solid var(--line);color:var(--text)}
-    .result{display:none;margin-top:18px;border:1px solid var(--line);border-radius:24px;padding:24px;background:rgba(255,255,255,.03);text-align:center}
+    .result{display:none;margin-top:22px}
     .result.show{display:block}
-    .score{font-size:clamp(4.5rem,16vw,8.5rem);font-weight:1000;letter-spacing:-.08em;line-height:.9;margin:8px 0}
-    .label{font-weight:950;font-size:1.15rem;margin-bottom:8px}
-    .diagnosis{font-size:1.4rem;font-weight:950;margin:14px 0 6px}
-    .copy{color:var(--muted);line-height:1.45;max-width:620px;margin:0 auto}
-    .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
-    .m{border:1px solid var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.025)}
-    .m strong{display:block;font-size:.8rem;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
-    .m span{font-weight:900}
+    .diagnostic{
+      position:relative;overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:clamp(20px,4vw,34px);
+      background:
+        radial-gradient(circle at 50% -20%,rgba(255,93,115,.32),transparent 45%),
+        linear-gradient(180deg,rgba(36,20,44,.98),rgba(16,11,24,.99));
+      box-shadow:0 30px 90px rgba(0,0,0,.48)
+    }
+    .diagnostic:before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.035),transparent 70%)
+    }
+    .alert{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
+      font-size:.74rem;font-weight:950;letter-spacing:.08em;text-transform:uppercase;
+      border:1px solid rgba(255,93,115,.35);color:#ffd5dc;background:rgba(255,93,115,.1)
+    }
+    .resultHead{text-align:center;position:relative;z-index:1}
+    .level{font-size:.88rem;color:var(--muted);font-weight:950;letter-spacing:.12em;text-transform:uppercase;margin-top:16px}
+    .score{font-size:clamp(5rem,17vw,9rem);font-weight:1000;letter-spacing:-.09em;line-height:.85;margin:8px 0 4px}
+    .score.hot{text-shadow:0 0 35px rgba(255,93,115,.4)}
+    .diagnosis{font-size:clamp(1.35rem,4vw,2rem);font-weight:1000;margin:14px 0 6px;letter-spacing:-.03em}
+    .copy{color:var(--muted);line-height:1.45;max-width:650px;margin:0 auto}
+    .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+    .m{border:1px solid var(--line);border-radius:16px;padding:15px;background:rgba(255,255,255,.03);text-align:left}
+    .m strong{display:block;font-size:.72rem;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.09em}
+    .m span{font-weight:950;line-height:1.25}
     .shareRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
     .cta{margin-top:18px;border:1px dashed rgba(255,207,92,.35);background:rgba(255,207,92,.05);color:#ffefb0;padding:15px;border-radius:16px;font-weight:900;text-align:center}
-    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:#fff;color:#111;padding:12px 16px;border-radius:999px;font-weight:900;opacity:0;transition:.2s;z-index:10}
+    .footerNote{text-align:center;color:#766a83;font-size:.78rem;margin-top:18px}
+    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:#fff;color:#111;padding:12px 16px;border-radius:999px;font-weight:900;opacity:0;transition:.2s;z-index:50}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+    .ember{position:absolute;bottom:-20px;width:8px;height:16px;border-radius:10px 10px 2px 2px;background:linear-gradient(#ffd45c,#ff5d73);box-shadow:0 0 16px rgba(255,93,115,.55);animation:rise 1.4s ease-out forwards}
+    @keyframes rise{to{transform:translateY(-105vh) rotate(220deg);opacity:0}}
+    .shake{animation:shake .42s ease}
+    @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
     @media(max-width:680px){
       .opts,.actions,.shareRow,.meta{grid-template-columns:1fr}
       h1{font-size:clamp(3.2rem,16vw,4.8rem)}
@@ -73,11 +89,13 @@
   </style>
 </head>
 <body>
+  <div class="fx" id="fx"></div>
   <div class="toast" id="toast">Copied.</div>
+
   <main class="wrap">
     <div class="top">
       <div class="brand">🏰 SKYCASTLE LABS</div>
-      <div class="badge">MOST REACTIONS MODE</div>
+      <div class="badge">HACKATHON DIAGNOSTIC SYSTEM</div>
     </div>
 
     <section class="hero">
@@ -123,15 +141,20 @@
       </div>
 
       <section class="result" id="result">
-        <div class="label" id="levelLabel">BUILD STATUS</div>
-        <div class="score" id="score">94%</div>
-        <div class="diagnosis" id="diagnosis">Agent-Induced Scope Creep</div>
-        <p class="copy" id="prognosis">Prognosis: Will submit anyway, powered by denial and one surviving button.</p>
+        <div class="diagnostic" id="diagnosticCard">
+          <div class="resultHead">
+            <div class="alert" id="alert">🚨 CRITICAL BUILD CONDITION</div>
+            <div class="level" id="levelLabel">BUILD STATUS</div>
+            <div class="score hot" id="score">94%</div>
+            <div class="diagnosis" id="diagnosis">Agent-Induced Scope Creep</div>
+            <p class="copy" id="prognosis">Prognosis: Will submit anyway, powered by denial and one surviving button.</p>
+          </div>
 
-        <div class="meta">
-          <div class="m"><strong>Cause of damage</strong><span id="cause">Scope creep</span></div>
-          <div class="m"><strong>Last words</strong><span id="lastWords">“One more tiny change.”</span></div>
-          <div class="m"><strong>Survived by</strong><span id="survived">47 unused components</span></div>
+          <div class="meta">
+            <div class="m"><strong>Cause of damage</strong><span id="cause">Scope creep</span></div>
+            <div class="m"><strong>Last words</strong><span id="lastWords">“One more tiny change.”</span></div>
+            <div class="m"><strong>Survived by</strong><span id="survived">47 unused components</span></div>
+          </div>
         </div>
 
         <div class="shareRow">
@@ -139,13 +162,15 @@
           <button class="secondary" id="shareBtn">📤 Share my score</button>
         </div>
 
-        <div class="cta">👇 Drop your cooked % in the thread. Lowest score is suspicious.</div>
+        <div class="cta">👇 Post your cooked % in the thread. Highest score gets absolutely nothing.</div>
       </section>
     </section>
+
+    <div class="footerNote">Built with the confidence of a project that has not seen production yet.</div>
   </main>
 
   <script>
-    const selected = [null,null,null];
+    const selected=[null,null,null];
     document.querySelectorAll(".q").forEach((q,i)=>{
       q.querySelectorAll(".opt").forEach(btn=>{
         btn.addEventListener("click",()=>{
@@ -156,30 +181,56 @@
       });
     });
 
-    const diagnoses = [
+    const diagnoses=[
       ["Mild Scope Creep","The build is stressed but still legally considered software.","Feature inflation","“This will only take 10 minutes.”","one functioning route"],
       ["Deployment-Induced Delusion","You no longer know if the app is broken or if GitHub Pages is simply thinking.","Deploy roulette","“Maybe refresh once more.”","a heroic console.log"],
       ["Agent-Induced Scope Creep","Your AI assistant is now technically your cofounder and has opinions.","Agent enthusiasm","“I’ll just let it fix one thing.”","47 unused components"],
       ["Terminally Vibe-Coded","The build has transcended requirements and entered folklore.","Unchecked vibes","“We can polish after.”","one surviving button"]
     ];
 
-    function compute(){
-      if(selected.some(v=>v===null)){
-        randomize();
-        return;
+    function cookFX(score){
+      const fx=document.getElementById("fx");
+      const count=score>83?34:score>64?18:8;
+      for(let i=0;i<count;i++){
+        const e=document.createElement("i");
+        e.className="ember";
+        e.style.left=(Math.random()*100)+"vw";
+        e.style.animationDelay=(Math.random()*.25)+"s";
+        e.style.transform="scale("+(0.6+Math.random()*1.2)+")";
+        fx.appendChild(e);
+        setTimeout(()=>e.remove(),1700);
       }
-      let raw = selected.reduce((a,b)=>a+b,0);
-      let score = Math.max(21,Math.min(99,Math.round(raw*1.2 + 12)));
-      const idx = score<45?0:score<65?1:score<84?2:3;
-      const d = diagnoses[idx];
+      if(score>83){
+        const card=document.getElementById("diagnosticCard");
+        card.classList.remove("shake");
+        void card.offsetWidth;
+        card.classList.add("shake");
+      }
+    }
+
+    function compute(){
+      if(selected.some(v=>v===null)){randomize();return;}
+      const raw=selected.reduce((a,b)=>a+b,0);
+      const score=Math.max(21,Math.min(99,Math.round(raw*1.2+12)));
+      const idx=score<45?0:score<65?1:score<84?2:3;
+      const d=diagnoses[idx];
+
       document.getElementById("score").textContent=score+"%";
       document.getElementById("diagnosis").textContent=d[0];
       document.getElementById("prognosis").textContent="Prognosis: "+d[1];
       document.getElementById("cause").textContent=d[2];
       document.getElementById("lastWords").textContent=d[3];
       document.getElementById("survived").textContent=d[4];
-      document.getElementById("levelLabel").textContent = score>83 ? "🔥 ABSOLUTELY COOKED" : score>64 ? "⚠️ CRITICALLY COOKED" : score>44 ? "😬 MEDIUM RARE" : "🟢 SOMEHOW ALIVE";
+
+      let level="🟢 SOMEHOW ALIVE", alert="SYSTEM STABLE. SUSPICIOUS.";
+      if(score>44){level="😬 MEDIUM RARE";alert="⚠️ BUILD IN DISTRESS";}
+      if(score>64){level="⚠️ CRITICALLY COOKED";alert="🚨 CRITICAL BUILD CONDITION";}
+      if(score>83){level="🔥 ABSOLUTELY COOKED";alert="🔥🔥 EMERGENCY VIBE FAILURE 🔥🔥";}
+
+      document.getElementById("levelLabel").textContent=level;
+      document.getElementById("alert").textContent=alert;
       document.getElementById("result").classList.add("show");
+      cookFX(score);
       document.getElementById("result").scrollIntoView({behavior:"smooth",block:"center"});
     }
 
@@ -195,21 +246,32 @@
     }
 
     function resultText(){
-      return `I am ${document.getElementById("score").textContent} cooked 🔥 — ${document.getElementById("diagnosis").textContent}. Prognosis: ${document.getElementById("prognosis").textContent.replace("Prognosis: ","")}`;
+      return `I am ${document.getElementById("score").textContent} cooked 🔥 — ${document.getElementById("diagnosis").textContent}. ${document.getElementById("prognosis").textContent}`;
     }
 
     const toast=document.getElementById("toast");
-    function showToast(msg){toast.textContent=msg;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),1600)}
+    function showToast(msg){
+      toast.textContent=msg;toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"),1600)
+    }
 
     document.getElementById("calc").addEventListener("click",compute);
     document.getElementById("random").addEventListener("click",randomize);
     document.getElementById("copyBtn").addEventListener("click",async()=>{
-      try{await navigator.clipboard.writeText(resultText()+" "+location.href);showToast("Diagnosis copied. Reputation damaged.")}catch{showToast("Copy failed. Very on-brand.")}
+      try{
+        await navigator.clipboard.writeText(resultText()+" "+location.href);
+        showToast("Diagnosis copied. Reputation damaged.")
+      }catch{showToast("Copy failed. Very on-brand.")}
     });
     document.getElementById("shareBtn").addEventListener("click",async()=>{
       const data={title:"How Cooked Is Your Hackathon Build?",text:resultText(),url:location.href};
       if(navigator.share){try{await navigator.share(data)}catch{}}
-      else{try{await navigator.clipboard.writeText(resultText()+" "+location.href);showToast("Share text copied.")}catch{showToast("Share failed. Add 6% cooked.")}}
+      else{
+        try{
+          await navigator.clipboard.writeText(resultText()+" "+location.href);
+          showToast("Share text copied.")
+        }catch{showToast("Share failed. Add 6% cooked.")}
+      }
     });
   </script>
 </body>
